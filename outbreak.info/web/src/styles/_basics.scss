@@ -1,0 +1,862 @@
+// --- fonts, default colors ---
+
+#app {
+  font-family: $font-family;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: $base-grey;
+}
+
+#app text {
+  font-family: $font-family;
+  stroke: none !important;
+}
+
+::placeholder {
+  font-family: $font-family;
+}
+
+.font-weight-700 {
+  font-weight: 700 !important;
+}
+// --- svg ---
+
+.axis--x text,
+.axis--y text,
+.default-black {
+  fill: $base-grey;
+}
+@media only screen and (max-width: 600px) {
+  .hero {
+    background-position: center;
+    background-size: cover;
+    background-image: none !important;
+  }
+
+  p.focustext {
+    font-size: 1em !important;
+  }
+}
+
+.hero {
+  background-position: center;
+  background-size: cover;
+  background-image: url("@/assets/hero-01.svg");
+}
+
+.nav-hero {
+  background-position: top left;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url("@/assets/navback-01.svg");
+}
+
+.back-1 {
+  background-position: bottom left;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url("@/assets/back1.png");
+  min-height: 100px;
+}
+
+.back-2 {
+  background-position: top right;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url("@/assets/back2.png");
+}
+
+.bg-grag-main {
+  background: linear-gradient(to right, $primary-color, $secondary-color);
+}
+
+.bg-grag-grey {
+  background: linear-gradient(to right, $grey-80, $grey-60);
+}
+// Forms
+
+.b-contain *,
+.b-contain *::after,
+.b-contain *::before {
+  box-sizing: content-box !important;
+}
+
+.b-contain input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+.b-contain span {
+  line-height: 1.54;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.b-contain {
+  display: table;
+  position: relative;
+  padding-left: 1.8rem;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+}
+
+.b-contain input[type="checkbox"] ~ .b-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1.25rem;
+  width: 1.25rem;
+  background: rgba(241, 245, 248, 1);
+  transition: background 250ms;
+  border: 1px solid rgba(184, 194, 204, 1);
+  border-radius: 0.125rem;
+}
+
+.b-contain input[type="radio"] ~ .b-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1.25rem;
+  width: 1.25rem;
+  background: rgba(241, 245, 248, 1);
+  transition: background 250ms;
+  border: 1px solid rgba(184, 194, 204, 1);
+  border-radius: 2.0rem;
+}
+
+.b-contain input[type="checkbox"] ~ .b-input::after {
+  content: '';
+  position: absolute;
+  display: none;
+  left: 0.45rem;
+  top: 0.18rem;
+  width: 0.25rem;
+  height: 0.6rem;
+  border: solid rgba(255, 255, 255, 1);
+  border-width: 0 2px 2px 0;
+  transition: background 250ms;
+  transform: rotate(45deg);
+}
+
+.b-contain input[type="radio"] ~ .b-input::after {
+  content: '';
+  position: absolute;
+  display: none;
+  left: 0.25rem;
+  top: 0.25rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 2.0rem;
+  background: rgba(255, 255, 255, 1);
+  transition: background 250ms;
+}
+
+.b-contain input:disabled ~ .b-input::after {
+  border-color: rgba(135, 149, 161, 1);
+}
+
+.b-contain input:checked ~ .b-input::after {
+  display: block;
+}
+
+.b-contain input:focus ~ .b-input,
+.b-contain:hover input ~ .b-input {
+  background: rgb(231, 238, 243);
+}
+
+.b-contain input:focus ~ .b-input {
+  box-shadow: 0 0 0 2px rgba(52,144,220,0.5);
+}
+
+.b-contain input:checked ~ .b-input {
+  background: rgba(209, 59, 98, 1);
+  border-color: rgba(159, 30, 64, 1);
+}
+
+.b-contain input[type="checkbox"]:disabled ~ .b-input {
+  background: rgba(241, 245, 248, 1);
+  border-color: rgba(184, 194, 204, 1);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.b-contain input[type="radio"]:disabled ~ .b-input {
+  background: rgba(241, 245, 248, 1);
+  border-color: rgba(184, 194, 204, 1);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.b-contain input[type="radio"]:disabled ~ .b-input::after {
+  background: rgba(135, 149, 161, 1);
+}
+
+.b-contain input:checked:focus ~ .b-input,
+.b-contain:hover input:not([disabled]):checked ~ .b-input {
+  background: $warning-color;
+  border-color: darken($warning-color,20%);
+}
+
+.b-contain .b-input::before {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3rem;
+  height: 3rem;
+  margin-left: -0.85rem;
+  margin-top: -0.85rem;
+  background: rgba(0, 130, 243, 1);
+  border-radius: 2rem;
+  opacity: 0.6;
+  z-index: 99999;
+  transform: scale(0);
+}
+@keyframes b-ripple {
+  0% {
+    transform: scale(0);
+  }
+
+  20% {
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+@keyframes b-ripple-duplicate {
+  0% {
+    transform: scale(0);
+  }
+
+  30% {
+    transform: scale(1);
+  }
+
+  60% {
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+.b-contain input + .b-input::before {
+  animation: b-ripple 250ms ease-out;
+}
+
+.b-contain input:checked + .b-input::before {
+  animation-name: b-ripple-duplicate;
+}
+
+.b-contain .b-input::before {
+  visibility: hidden;
+}
+
+.b-contain input:focus + .b-input::before {
+  visibility: visible;
+}
+
+.b-contain:first-child .b-input::before {
+  visibility: hidden;
+}
+// --- common useful things ---
+
+.router-link-black {
+  color: $base-grey !important;
+}
+
+.full-page {
+  min-height: 100vh;
+}
+
+.half-page {
+  min-height: 50vh;
+}
+
+.main {
+  overflow: hidden;
+}
+
+p.focustext {
+  font-size: 25px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: auto !important;
+  pointer-events: none !important;
+}
+
+.line-height-1 {
+  line-height: 1.1em;
+}
+
+.line-height-sm {
+  line-height: 0.85em;
+}
+
+.leaflet-container .leaflet-control-attribution,
+.leaflet-container .leaflet-control-scale {
+  opacity: 0.2;
+}
+
+.no-underline {
+  text-decoration: none !important;
+
+  &:hover {
+    text-decoration: none !important;
+  }
+}
+
+.underline-hover {
+  text-decoration: underline !important;
+}
+
+.font-awesome {
+  font-family: "Font Awesome 5 Brands", "Font Awesome 5 Free", FontAwesome, sans-serif !important;
+}
+
+.box-shadow {
+  box-shadow: 1px 1px 2px 2px $grey-alpha15;
+}
+
+.fill-primary-light {
+  background: lighten($primary-color, 25%);
+}
+
+.text-main {
+  color: $primary-color;
+}
+
+.text-sec {
+  color: $secondary-color;
+}
+
+.text-highlight {
+  color: $warning-color;
+
+  &__lighter {
+    color: lighten($warning-color, 20%);
+  }
+
+  &__brighter {
+    color: #f5648a;
+  }
+
+  & a {
+    color: $warning-color;
+  }
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.bg-light {
+  background-color: $lightback;
+}
+
+.bg-main {
+  background-color: $primary-color;
+
+  &__lighter {
+    background-color: lighten($primary-color,20%);
+  }
+
+  &__darker {
+    background-color: darken($primary-color,10%);
+  }
+}
+
+.bg-sec {
+  background-color: $secondary-color;
+
+  &__lighter {
+    background-color: lighten($secondary-color,20%);
+  }
+
+  &__darker {
+    background-color: darken($secondary-color,10%);
+  }
+}
+
+.bg-highlight {
+  background-color: $warning-color;
+
+  &__lighter {
+    background-color: lighten($warning-color,20%);
+  }
+
+  &__darker {
+    background-color: darken($warning-color,10%);
+  }
+}
+
+.bg-grey {
+  background-color: $base-grey;
+
+  &__lighter {
+    background-color: lighten($base-grey,20%);
+  }
+
+  &__lightest {
+    background-color: lighten($base-grey,70%);
+  }
+
+  &__darker {
+    background-color: darken($base-grey,10%);
+  }
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.link {
+  color: $link-color !important;
+  cursor: pointer;
+
+  &:hover {
+    color: $link-hover !important;
+    text-decoration: underline;
+  }
+}
+
+.text-grey {
+  color: #999999;
+}
+// Animation
+@-webkit-keyframes scale-in-center {
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+    opacity: 1;
+  }
+
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes scale-in-center {
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+    opacity: 1;
+  }
+
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.border-section {
+  border-top: 1px solid $base-grey;
+  border-bottom: 1px solid $base-grey;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.scale-in-center {
+  -webkit-animation: scale-in-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  animation: scale-in-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+.autocomplete {
+  position: relative;
+  max-width: 700px;
+  margin-bottom: 0.5em;
+}
+
+.autocomplete-results {
+  padding: 0;
+  margin: 0;
+  border: 1px solid $grey-40;
+  background: $grey-30;
+  box-shadow: 1px 1px 2px 2px $grey-alpha15;
+  height: 120px;
+  overflow: auto;
+  width: 100%;
+}
+
+.autocomplete-result {
+  list-style: none;
+  text-align: left;
+  padding: 4px 2px;
+  cursor: pointer;
+}
+
+.autocomplete-result.is-active,
+.autocomplete-result:hover {
+  background-color: $primary-color;
+  color: white;
+}
+
+.autocomplete-input {
+  border: 1px solid $grey-40;
+  border-radius: 0.25em;
+  padding: 0.5em;
+}
+
+input {
+  flex-grow: 2;
+  border: none;
+  font-size: 1em;
+  // width: 100%;
+}
+
+input:focus {
+  // removing the input focus blue box.
+  outline: none;
+}
+// placeholder
+
+.floating-label {
+  margin-bottom: 0.25em;
+  text-transform: uppercase;
+  flex-grow: 1;
+  color: $grey-60;
+}
+
+.floating-label.empty {
+  font-size: 1em;
+  transition: 0.5s ease all;
+}
+
+.floating-label.filled {
+  font-size: 0.7em;
+  transition: 0.5s ease all;
+}
+
+select {
+  margin: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  padding: 0.3em 1.5em 0.3em 0.3em;
+  color: $secondary-color;
+  background: url("@/assets/drop2.svg");
+  background-color: lighten($grey-40,20%);
+  background-repeat: no-repeat;
+  border: thin $secondary-color solid;
+  background-size: 16px 16px;
+  background-position: center right 5px;
+  border-radius: 0.25rem;
+}
+
+select:focus {
+  border: thin $warning-color solid;
+  border: thin $warning-color solid;
+  outline: none;
+}
+
+select:hover {
+  background: url("@/assets/drop.svg");
+  background-color: lighten($grey-40,20%);
+  background-repeat: no-repeat;
+  border: thin $secondary-color solid;
+  background-size: 16px 16px;
+  background-position: center right 5px;
+}
+
+.radio-item {
+  display: inline-block;
+  position: relative;
+  padding: 0 6px;
+  margin: 0;
+}
+
+.radio-item input[type='radio'] {
+  display: none;
+  vertical-align: baseline;
+}
+
+.radio-item label {
+  line-height: 1;
+}
+
+.radio-item label:before {
+  content: " ";
+  display: inline-block;
+  position: relative;
+  top: 5px;
+  margin: 0 8px 0 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 11px;
+  border: 2px solid #888;
+  background-color: transparent;
+}
+
+.radio-item-light label:before {
+  content: " ";
+  display: inline-block;
+  position: relative;
+  top: 5px;
+  margin: 0 15px 0 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 11px;
+  border: 2px solid white;
+  background-color: transparent;
+}
+
+.radio-item input[type=radio]:checked + label:before {
+  border-color: $secondary-color;
+}
+
+.radio-item-light input[type=radio]:checked + label:before {
+  border-color: white;
+}
+
+.radio-item input[type=radio]:checked + label:after {
+  border-radius: 11px;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 9px;
+  left: 10px;
+  content: " ";
+  display: block;
+  background: $secondary-color;
+}
+
+.radio-item-light input[type=radio]:checked + label:after {
+  border-radius: 11px;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 9px;
+  left: 10px;
+  content: " ";
+  display: block;
+  background: white;
+}
+
+#snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+}
+// snackbar popup
+// from https://www.w3schools.com/howto/howto_js_snackbar.asp
+
+.snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 0.75rem;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+}
+
+.snackbar-accent {
+  background-color: $warning-color !important;
+}
+
+.snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+@-webkit-keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+@keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}
+@keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}
+
+.leaflet-container {
+  background: linear-gradient(to bottom, $grey-40 0%, $secondary-color 100%) !important; // background: linear-gradient(to top,  $secondary-color  0%, $primary-color 100%) !important;
+}
+
+.no-underline {
+  text-decoration: none;
+}
+
+.text-underline {
+  text-decoration: underline;
+}
+
+.tooltip-basic {
+  background: #ffffffe0;
+  padding: 7px;
+  border: 1px solid $base-grey;
+  border-radius: 3px;
+  position: fixed;
+  display: none;
+  z-index: 1000;
+}
+
+.font-size-2 {
+  font-size: 1.25rem;
+}
+$location-color: #fc6189;
+
+.location-banner {
+  border-width: 0;
+  border-style: solid;
+  background: linear-gradient(to left, $primary-color 0%, $location-color 50%, $primary-color 100%) left bottom darken($primary-color,10%) no-repeat;
+  background-size: 100% 7px;
+  /* if linear-gradient, we need to resize it */
+}
+
+.location-header {
+  color: lighten($location-color, 12%);
+}
+$mutation-color: #f28e2c;
+
+.mutation-banner {
+  border-width: 0;
+  border-style: solid;
+  background: linear-gradient(to left, $primary-color 0%, $mutation-color 50%, $primary-color 100%) left bottom darken($primary-color,10%) no-repeat;
+  background-size: 100% 7px;
+  /* if linear-gradient, we need to resize it */
+}
+
+.mutation-header {
+  color: lighten($mutation-color, 15%);
+}
+
+.mutation-hyperlink a {
+  color: lighten($mutation-color, 30%);
+}
+// $comparison-color: lighten(#49016a, 45%);
+$comparison-color: #edc949; // yellow
+$comparison-color: #499894; //teal
+
+.comparison-banner {
+  border-width: 0;
+  border-style: solid;
+  background: linear-gradient(to left, $primary-color 0%, $comparison-color 50%, $primary-color 100%) left bottom darken($primary-color,10%) no-repeat;
+  background-size: 100% 7px;
+  /* if linear-gradient, we need to resize it */
+}
+
+.comparison-header {
+  color: lighten($comparison-color, 15%);
+}
+$status-color: #bab0ab;
+
+.status-banner {
+  border-width: 0;
+  border-style: solid;
+  background: linear-gradient(to left, $primary-color 0%, $status-color 50%, $primary-color 100%) left bottom darken($primary-color,10%) no-repeat;
+  background-size: 100% 7px;
+  /* if linear-gradient, we need to resize it */
+}
+
+.status-header {
+  color: lighten($status-color, 10%);
+}
+
+.bright-hyperlink,
+.bright-hyperlink a {
+  color: #70d3ff;
+}
+
+@media only screen and (max-width: 500px) {
+  .mb-flex{
+    flex-direction: column;
+  }
+}
+
+.fa-sm {
+  line-height: 1em !important;
+}
+
+.timeline-btn {
+  font-size: 0.75em;
+  height: 30px;
+  text-transform: lowercase !important;
+}
+
+.time-btn-active {
+  background-color: $warning-color !important;
+  color: white !important;
+}
+
+@media only screen and (min-width: 1024px) {
+  .btn-flex {
+    display: flex;
+  }
+}
