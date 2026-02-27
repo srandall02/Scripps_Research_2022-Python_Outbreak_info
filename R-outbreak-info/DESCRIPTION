@@ -1,0 +1,36 @@
+Package: outbreakinfo
+Type: Package
+Title: outbreak.info R Client
+Version: 0.2.0
+Authors@R: c(person("Manar", "Alkuzweny", email = "manaralkuzweny@gmail.com",
+                  role = c("aut", "cre")),
+                  person("Karthik", "Gangavarapu", email = "gkarthik@ucla.edu",
+                                    role = c("aut")),
+                  person("Laura", "Hughes", email = "lhughes@scripps.edu",
+                                    role = c("aut"))
+                                    )
+Description: This package retrieves up-to-date COVID-19 epidemiological and genomic data from outbreak.info.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: FALSE
+Imports:
+    jsonlite,
+    RcppSimdJson,
+    ggplot2,
+    readr,
+    progress,
+    dplyr,
+    plyr,
+    purrr,
+    stringr,
+    tidyr,
+    httr,
+    yaml,
+    sf
+RoxygenNote: 7.1.2
+Suggests:
+    testthat,
+    knitr,
+    lubridate
+URL: https://outbreak-info.github.io/R-outbreak-info/
+BugReports: https://github.com/outbreak-info/R-outbreak-info/issues

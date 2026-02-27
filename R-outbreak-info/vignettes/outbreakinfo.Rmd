@@ -1,0 +1,194 @@
+---
+title: "Introduction to outbreakinfo"
+# author: "Laura Hughes"
+date: "`r format(Sys.Date(), '%d %B %Y')`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to outbreakinfo}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+[outbreak.info](https://outbreak.info) is a project to enable the tracking of SARS-CoV-2 Variants within the COVID-19 pandemic. This R package offers access to the data we have gathered and calculated to replicate the visualizations on outbreak.info. Here, we'll outline some of the basic functionality of the R package to access the genomic (SARS-CoV-2 variant) data, research library, and epidemiology data (COVID-19 cases and deaths).
+
+## SARS-CoV-2 variant prevalence
+
+The core functionality within the suite of [Variant Prevalence Functions](https://outbreak-info.github.io/R-outbreak-info/reference/index.html#section-sars-cov-variant-prevalence) include accessing data for:
+
+- [Variant prevalence over time](#prevalence-over-time)
+- [Cumulative variant prevalence](#cumulative-variant-prevalence)
+- [Calculating mutation prevalence within a variant](#muations-within-a-variant)
+
+### Getting started
+Before we start, we need to provide our GISAID credentials to access the genomic data.
+If you don't have a GISAID account, you can [register](https://www.gisaid.org/registration/register/)
+for one on their website. It may take a day or two for the account to become active.
+```{r install, message = FALSE, results='hide', eval=FALSE}
+# Install the package, if you haven't already, using devtools
+devtools::install_github("outbreak-info/R-outbreak-info")
+```
+
+```{r pkgs, message = FALSE, results='hide'}
+# Package imports
+library(outbreakinfo)
+
+# Not needed; just used to tidy / visualize some of the outputs
+library(dplyr)
+library(knitr)
+library(lubridate)
+library(ggplot2)
+```
+
+```{r auth, message = FALSE, results='hide', eval=FALSE}
+# Authenticate yourself using your GISAID credentials.
+authenticateUser()
+```
+
+---
+
+### Prevalence over time
+Tracking how the prevalence of variants change over time is vital to understanding the evolution of SARS-CoV-2. We can calculate this prevalence for any lineage, mutation, combination of mutations, or lineage with added mutations. We'll access the data and then plot the results.
+
+#### Lineage over time: B.1.1.7
+```{r prev-time}
+# Function to grab all the data for the prevalence of B.1.1.7 in Texas
+b117_tx = getPrevalence(pangolin_lineage = "B.1.1.7", location="Texas")
+
+# Accessing just the first row:
+t(b117_tx[1,])
+
+# Plotting it:
+plotPrevalenceOverTime(b117_tx, title = "B.1.1.7 prevalence in Texas")
+```
+Variables are described in the [Genomics Data Dictionary](https://outbreak-info.github.io/R-outbreak-info/reference/genomicsDataDictionary.html).
+
+#### Customizing variant inputs
+In addition to viewing the change in prevalence of a lineage over time, more complex variants can be queried. This includes **combinations of lineages**, like the [Delta variant](https://outbreak.info/situation-reports/delta), **lineages with additional mutation(s)**, like [B.1.1.7 with S:E484K](https://outbreak.info/situation-reports?muts=S%3AE484K&pango=B.1.1.7), **individual mutations**, like [S:E484K](https://outbreak.info/situation-reports?muts=S%3AE484K), or **groups of mutations**, like [S:E484K and S:P681R](https://outbreak.info/situation-reports?muts=S%3AE484K&muts=S%3AP681R). View the [Variant Tracker](varianttracker.html) and [Location Tracker](locationtracker.html) vignettes for more advanced examples.
+
+---
+
+### Cumulative variant prevalence geographically
+To get the prevalence of a particular variant to compare between locations, you can access the data through the `getCumulativeBySubadmin` function. Note that there are options to supply a location, like `"United States"` to view the prevalence broken down by U.S. state, and/or over the past `n` days. See the [Variant Tracker Vignette](varianttracker.html) for more details.
+```{r cumulative}
+# Calculate cumulative prevalence of B.1.1.7 by country
+b117_world = getCumulativeBySubadmin(pangolin_lineage = "B.1.1.7")
+
+# filtering down the data to view a few countries
+b117_world %>%
+  filter(name %in% c("Canada", "United Kingdom", "Australia", "New Zealand")) %>%
+  select(name, proportion, proportion_ci_lower, proportion_ci_upper) %>%
+  arrange(desc(proportion)) %>%
+  knitr::kable()
+```
+
+---
+
+### Mutations within a lineage
+When we say a lineage, like B.1.1.7, what does that actually mean?  The `getMutationsByLineage` function allows you to pull the prevalence of all the mutations within all the sequences assigned to B.1.1.7 or other lineages, and  `plotMutationHeatmap` allows you to compare their prevalence in a heatmap:
+```{r characteristic_mutations}
+char_muts = getMutationsByLineage(pangolin_lineage = c("B.1.1.7", "B.1.351", "B.1.617.2", "P.1"))
+plotMutationHeatmap(char_muts, title = "Mutations with at least 75% prevalence in Variants of Concern", lightBorders = FALSE)
+```
+
+---
+
+### Additional genomic functions
+All the [Variant Prevalence Functions](https://outbreak-info.github.io/R-outbreak-info/reference/index.html#section-sars-cov-variant-prevalence) provide documentation on their functionality and examples.
+
+
+
+---
+## Research Library
+The outbreak.info Research Library collects and standardizes metadata across COVID-19 research, including publications (including preprints), clinical trials, datasets, protocols, and more. These functions do not require a GISAID account or calling `authenticateUser()` before use.
+
+---
+### Accessing Research Library metadata
+All COVID-19 research metadata can be accessed through the main function `getResourcesData` which searches across a series of [COVID-19 resources](https://outbreak.info/sources#resources) of various types. For instance, you can find all research on seroprevalence, including publications, clinical trials, datasets, and more:
+```{r research, warning = FALSE}
+# Get the resources metadata
+# Use `fetchAll = TRUE` to get all the results, not just the first 10
+# Use  double quotes around "sero-prevalence" to look for that exact phrase. Without quotes, the query will search for "sero" or "prevalence", not their combination.
+# Combine terms using OR or AND (capitalization is required!)
+seroprevalence = getResourcesData(query = 'seroprevalence OR "sero-prevalence"', fetchAll = TRUE, fields = c("name", "description", "@type", "date", "curatedBy", "journalName", "funding", "url"))
+
+# Accessing just the first row:
+t(seroprevalence[1,])
+
+# Plot the increase in seroprevalence research over time
+# roll up the number of resources by week
+resources_by_date = seroprevalence %>%
+  mutate(year = lubridate::year(date),
+         iso_week = lubridate::isoweek(date))
+
+# count the number of new resources per week.
+resources_per_week = resources_by_date %>%
+  count(`@type`, iso_week, year) %>%
+  # convert from iso week back to a date
+  mutate(iso_date = lubridate::parse_date_time(paste(year,iso_week, "Mon", sep="-"), "Y-W-a"))
+
+ggplot(resources_per_week, aes(x = iso_date, y = n)) + 
+  geom_col(fill = "#66c2a5") +
+  scale_x_datetime(date_labels = "%b %Y", name = "week") + 
+  ggtitle("Seroprevalence research by week", subtitle = paste0("Number of resources in outbreak.info's Research Library as of ", format(Sys.Date(), "%d %B %Y")))
+
+
+# Visualize the breakdown of seroprevalence research
+resources_by_type =  seroprevalence %>% 
+  count(`@type`) %>% 
+  arrange(n)
+
+# order the levels in the bar chart
+resources_by_type$`@type` = factor(resources_by_type$`@type`, resources_by_type %>% pull(`@type`))
+
+ggplot(resources_by_type, aes(x = `@type`, y = n, fill=`@type`)) +
+  geom_col() +
+  coord_flip() + 
+  scale_fill_manual(values = c(Publication = "#e15759", ClinicalTrial = "#b475a3", Dataset = "#126b93", Protocol = "#59a14f")) +
+  ggtitle("Seroprevalence research by type of resource", subtitle = paste0("Number of resources in outbreak.info's Research Library as of ", format(Sys.Date(), "%d %B %Y"))) + 
+  theme_minimal() +
+  theme(axis.title = element_blank(), legend.position = "none", panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank())
+```
+
+### Customizing Research Library queries
+View the [Research Library vignette](researchlibrary.html) for more details on how to access these data and [Research Library schemas](https://discovery.biothings.io/view/outbreak) for information on the variables contained within the metadata.
+
+### Additional Research Library functions
+All the [Research Library Functions](https://outbreak-info.github.io/R-outbreak-info/reference/index.html#section-research-library) provide documentation on their functionality and examples.
+
+---
+
+## Cases & deaths data
+Epidemiology data in outbreak.info includes daily cases and death data for World Bank Regions, individual countries, states/provinces, U.S. Metropolitan areas, and U.S. counties. These functions do not require a GISAID account or calling `authenticateUser()` before use.
+
+
+---
+
+
+### Accessing Cases & Deaths data
+All cases and death data can be accessed through the main function `getEpiData` and plotted with `plotEpiData`. For instance, you can compare the cases per capita in a few major metropolitan areas:
+```{r epi}
+# Get the epi data
+epi_metro = getEpiData(name = c("Detroit-Warren-Dearborn, MI", "New Orleans-Metairie, LA"))
+
+# Accessing just the first row:
+t(epi_metro[1,])
+
+# Get the epi data and plot it.
+plotEpiData(locations = c("Detroit-Warren-Dearborn, MI", "New Orleans-Metairie, LA"), variable = "confirmed_rolling_per_100k")
+```
+
+Variables are described in the [Epidemiology Data Dictionary](https://outbreak-info.github.io/R-outbreak-info/reference/epidemiologyDataDictionary.html).
+
+---
+
+### Customizing epidemiology features
+View the [Epidemiology vignette](epivignette.html) for more details on how to access these data and [Epidemiology Data Dictionary](https://outbreak-info.github.io/R-outbreak-info/reference/epidemiologyDataDictionary.html) for information on the variables contained within the data.
+
+### Additional epidemiology functions
+All the [Cases & Deaths Functions](https://outbreak-info.github.io/R-outbreak-info/reference/index.html#section-cases-deaths) provide documentation on their functionality and examples.

@@ -1,0 +1,356 @@
+---
+title: "Cases & Deaths data"
+date: "`r format(Sys.Date(), '%d %B %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(jsonlite)
+library(ggplot2)
+library(readr)
+library(outbreakinfo)
+```
+
+# Accessing the data in outbreak.info's Variant Tracker
+Outbreak.info's Cases & Deaths Tracker allows you to compare trends in COVID-19 cases and deaths by location over time. We will walk you through how to run some essential queries. We can help you to answer questions like:
+
+- [How do I retrieve location names and codes used in the epi functions?](#how-to-retrieve-location-names-and-codes)
+- [How do I pull epidemiological data by location or according to my own specs?](#how-to-retrieve-epi-data-1)
+- [How do I plot epidemiological data?](#how-to-plot-epi-data)
+
+------
+
+## Before we start...
+Import the packages we'll use to access the data.
+
+Note that unlike the [SARS-CoV-2 Variant Prevalence functions](https://outbreak-info.github.io/R-outbreak-info/reference/index.html#section-sars-cov-variant-prevalence), none of the Cases & Deaths functions or anything in this vignette require GISAID authentication through the `authenticateUser()` function.
+```{r pkgs, message = FALSE, results='hide'}
+# Package imports
+library(outbreakinfo)
+
+```
+
+The following is a data dictionary for your reference:
+```{r, eval=T, echo=T}
+knitr::kable(epidemiologyDataDictionary())
+```
+
+------
+
+## How to retrieve location names and codes
+
+#### **getISO3**
+**Description:** 
+
+Get ISO3 codes for World Bank regions, countries, states/provinces, metropolitan areas, and/or counties.
+
+**Usage:**
+
+```{r, eval=F, echo=T}
+getISO3(locations_to_search)
+```
+
+**Arguments:**
+
+locations_to_search: a `vector` or `list` of location (World Bank region, country, state/province, metropolitan area, county) name(s)
+
+**Example:**
+
+```{r}
+iso3=getISO3(c("United States of America", "Brazil"))
+print(iso3)
+```
+
+------
+
+#### **searchLocations**
+**Description:** 
+
+Get exact spelling of locations at the same administrative level.
+
+**Usage:**
+
+```{r, eval=F, echo=T}
+searchLocations(locations_to_search, admin_level)
+```
+
+**Arguments:**
+
+locations_to_search: a `vector` or `list` of location (World Bank region, country, state/province, metropolitan area, county) name(s) at the same administrative level
+
+admin_level: an `integer` representing an administrative level (World Bank regions = -1, countries = 0, states/provinces = 1, metropolitan areas = 1.5, counties = 2)
+
+**Example:**
+
+```{r}
+names=searchLocations(c("California", "Florida"), admin_level=1)
+print(names)
+```
+
+------
+
+## How to retrieve epi data
+
+#### **getEpiData**
+**Description:** 
+
+Retrieve a `dataframe` of up-to-date COVID-19 data from [outbreak.info](https://outbreak.info/) according to user specifications.
+
+**Usage:**
+
+```{r, eval=F, echo=T}
+getEpiData(name=NULL, location_id=NULL, wb_region=NULL, country_name=NULL, state_name=NULL, admin_level=NULL, date=NULL, mostRecent=NULL, fields=NULL, sort, size=1000)
+```
+
+**Arguments:**
+
+name: a `vector` or `list` of location (World Bank region, country, state/province, metropolitan area, county) name(s)
+
+location_id: a `vector` or `list` of ISO3 codes representing locations (World Bank region, country, state/province, metropolitan area, county)
+
+wb_region: a `vector` or `list` of World Bank region name(s)
+
+country_name: a `vector` or `list` of country name(s)
+
+state_name: a `vector` or `list` of state name(s)
+
+admin_level: an `integer` representing an administrative level (World Bank regions = -1, countries = 0, states/provinces = 1, metropolitan areas = 1.5, counties = 2)
+
+date: a `vector` or `list` of date(s) as string(s) in YYYY-MM-DD format
+
+mostRecent: a `Boolean` (T/F) indicating if all data should be returned or only most recent
+
+fields: a `vector` of API fields to include in results
+
+sort: a `string` representing parameter to sort results by
+
+size: an `integer` representing size
+
+**Example:**
+
+```{r}
+df=getEpiData(name="United States of America", date="2020-07-01")
+df[!duplicated(df$name), c("name", "date", "confirmed", "dead")]
+```
+
+------
+
+#### **getLocationData**
+**Description:** 
+
+Retrieve a `dataframe` of up-to-date COVID-19 data from [outbreak.info](https://outbreak.info/) for specified locaton(s) (World Bank region, country, state/province, metropolitan area, county).
+
+**Usage:**
+
+```{r, eval=F, echo=T}
+getLocationData(location_names)
+```
+
+**Arguments:**
+
+location_names: a `vector` or `list` of location (World Bank region, country, state/province, metropolitan area, county) name(s)
+
+**Example:**
+
+```{r}
+df=getLocationData(location_names=c("Brazil", "San Diego"))
+df[!duplicated(df$name), c("name", "date", "confirmed")]
+```
+
+--------
+
+#### **getAdmn0**
+**Description:** 
+
+Retrieve a `dataframe` of up-to-date COVID-19 data from [outbreak.info](https://outbreak.info/) for all countries.
+
+**Usage:**
+
+```{r, eval=F, echo=T}
+getAdmn0()
+```
+
+**Arguments:**
+
+none
+
+**Example:**
+
+```{r, eval=F, echo=T}
+world_df=getAdmn0()
+length(unique(world_df$name))
+```
+
+--------
+
+#### **getCountryByRegion**
+**Description:** 
+
+Retrieve a `dataframe` of up-to-date COVID-19 data from [outbreak.info](https://outbreak.info/) for all countries in one or more World Bank regions.
+
+**Usage:**
+
+```{r, eval=F, echo=T}
+getCountryByRegion(wb_regions)
+```
+
+**Arguments:**
+
+wb_regions:  a `vector` or `list` of World Bank region names
+
+**Example:**
+
+```{r}
+region_df=getCountryByRegion("South Asia")
+print(unique(region_df$name))
+```
+
+------
+
+#### **getAdmn1ByCountry**
+**Description:** 
+
+Retrieve a `dataframe` of up-to-date COVID-19 data from [outbreak.info](https://outbreak.info/) for all states/provinces in one or more countries.
+
+**Usage:**
+
+```{r, eval=F, echo=T}
+getAdmn1ByCountry(countries)
+```
+
+**Arguments:**
+
+countries:  a `vector` or `list` of country names
+
+**Example:**
+
+```{r}
+state_df=getAdmn1ByCountry("India")
+print(unique(state_df$name))
+```
+
+--------
+
+#### **getMetroByCountry**
+**Description:** 
+
+Retrieve a `dataframe` of up-to-date COVID-19 data from [outbreak.info](https://outbreak.info/) for all metropolitan areas in the United States of America.
+
+**Usage:**
+
+```{r, eval=F, echo=T}
+getMetroByCountry()
+```
+
+**Arguments:**
+
+none
+
+**Example:**
+
+```{r, eval=F, echo=T}
+metro_df=getMetroByCountry()
+```
+
+--------
+
+#### **getAdmn2ByCountry**
+**Description:** 
+
+Retrieve a `dataframe` of up-to-date COVID-19 data from [outbreak.info](https://outbreak.info/) for all counties in the United States of America.
+
+**Usage:**
+
+```{r, eval=F, echo=T}
+getAdmn2ByCountry()
+```
+
+**Arguments:**
+
+none
+
+**Example:**
+
+```{r, eval=F, echo=T}
+county_df=getAdmn2ByCountry()
+```
+
+---------
+
+#### **getAdmn2ByState**
+**Description:** 
+
+Retrieve a `dataframe` of up-to-date COVID-19 data from [outbreak.info](https://outbreak.info/) for all counties in given state(s).
+
+**Usage:**
+
+```{r, eval=F, echo=T}
+getAdmn2ByState(states)
+```
+
+**Arguments:**
+
+states: a `vector` or `list` of state names
+
+**Example:**
+
+```{r}
+ca_df=getAdmn2ByState("California")
+length(unique(ca_df$name))
+```
+
+--------
+
+#### **getByAdmnLevel**
+**Description:** 
+
+Retrieve a `dataframe` of up-to-date COVID-19 data from [outbreak.info](https://outbreak.info/) for all locations at a specified administrative level.
+
+**Usage:**
+
+```{r, eval=F, echo=T}
+getByAdmnLevel(admin_level)
+```
+
+**Arguments:**
+
+admin_level: an `integer` representing an administrative level (World Bank regions = -1, countries = 0, states/provinces = 1, metropolitan areas = 1.5, counties = 2)
+
+**Example:**
+
+```{r}
+admin_df=getByAdmnLevel(-1)
+print(unique(admin_df$name))
+```
+
+--------
+
+## How to plot epi data
+
+#### **plotEpiData**
+**Description:** 
+
+Plot a metric of interest using up-to-date COVID-19 data using data from [outbreak.info](https://outbreak.info/) for location(s) of interest (World Bank region, country, state/province, metropolitan area, county)
+
+**Usage:**
+
+```{r, eval=F, echo=T}
+plotEpiData(locations, variable)
+```
+
+**Arguments:**
+
+location: a `vector` or `list` of location name(s)
+
+variable: metric to plot
+
+**Example:**
+
+```{r}
+p=plotEpiData(c("Brazil", "San Diego"), "confirmed_per_100k")
+show(p)
+```
+
+------
+
