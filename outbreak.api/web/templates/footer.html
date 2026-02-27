@@ -1,0 +1,39 @@
+<footer id="footer" class="py-4" style="bottom:0; background:#09253C;">
+  <div class="text-center text-muted">
+        <ul>
+          <li class="d-inline m-2">
+            <a href="mailto:blog@sulab.org" target="_blank" class="text-light">
+              Contact Us
+            </a>
+          </li>
+          <li class="d-inline m-2">
+            <a
+              class="text-light"
+              href="https://outbreak.info/privacy"
+              >Privacy Policy</a
+            >
+          </li>
+          <li class="d-inline m-2">
+            <a
+              class="text-light"
+              href="https://outbreak.info/terms"
+              >Terms</a
+            >
+          </li>
+        </ul>
+        <small>
+          All content copyright
+          <a href="http://sulab.org/" target="_blank" rel="noreferrer">
+            SuLab</a
+          >
+          © <span id="year"></span> <br />
+          All rights reserved.
+        </small>
+      </div>
+</footer>
+<script>
+var currentTime = new Date()
+var year = currentTime.getFullYear()
+var myelement = document.getElementById("year");
+    myelement.innerHTML= year;
+</script>
