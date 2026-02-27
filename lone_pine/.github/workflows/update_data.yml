@@ -1,0 +1,61 @@
+name: Daily update data
+on:
+  schedule:
+    - cron: '0 14 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v3
+
+    - name: Setup python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        cache: 'pip'
+        cache-dependency-path: '.github/env/requirements.txt'
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install libkrb5-dev
+        python -m pip install --upgrade pip
+        pip install -r .github/env/requirements.txt
+
+    - name: Update sequences
+      run: |
+        python .github/scripts/update_seqs.py
+
+    - name: Update cases
+      continue-on-error: true
+      run: |
+        python .github/scripts/update_cases.py
+
+    - name: Save new cases
+      uses: actions/upload-artifact@v3
+      with:
+        name: NewCases
+        path: new_cases.csv
+
+    - name: Verify Changed files
+      uses: tj-actions/verify-changed-files@v13
+      id: verify-changed-files
+      with:
+        files: |
+          resources/sequences.csv
+          resources/cases.csv
+
+    - name: Update growth rates
+      run: | 
+        python .github/scripts/update_growth_rates.py
+
+    - name: Commit changed files
+      if: steps.verify-changed-files.outputs.files_changed == 'true'
+      run: |
+        git config --global user.name 'watronfire'
+        git config --global user.email 'snowboardman007@gmail.com'
+        git commit -am "Automated update of cases and sequences on $(date +'%Y-%m-%d')"
+        git push

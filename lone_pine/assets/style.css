@@ -1,0 +1,244 @@
+.js-plotly-plot .plotly .modebar {
+    padding-top: 5%;
+    margin-right: 3.5%;
+}
+
+div {
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+body {
+    background-color: #fFFFFF;
+}
+
+.two.columns {
+    width: 16.25%;
+}
+
+.column,
+.columns {
+    margin: 0;
+}
+
+h4 {
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+h5 {
+    margin-top: 0;
+    font-size: 18px;
+}
+
+.pretty_container {
+    border-radius: 0;
+    background-color: #ffffff;
+    margin: 10px;
+    padding: 5px 15px 15px;
+    position: relative;
+}
+
+.pretty_container_rounded {
+    border-radius: 5px;
+    margin: 10px;
+    padding: 5px 15px 15px;
+    position: relative;
+    box-shadow: 0 0 5px lightgray;
+}
+
+.bare_container {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+}
+
+.dcc_control {
+    margin: 0;
+    padding: 5px;
+    width: calc(100% - 40px);
+}
+
+.control_label {
+    padding: 10px 10px 0;
+    margin: 0 0 0;
+    width: calc(100% - 40px);
+}
+
+.rc-slider {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.flex-display {
+    display: flex;
+}
+
+.container-display {
+    display: flex;
+}
+
+#individual_graph,
+#aggregate_graph {
+    width: calc(100% - 30px);
+    position: absolute;
+}
+
+#count_graph {
+    position: absolute;
+    height: calc(100% - 30px);
+    width: calc(100% - 30px);
+}
+
+#countGraphContainer {
+    flex: 5;
+    position: relative;
+}
+
+#header {
+    align-items: center;
+}
+
+
+#learn-more-button {
+    text-align: center;
+    height: 100%;
+    padding: 0 20px;
+    text-transform: none;
+    font-size: 15px;
+    float: right;
+    margin-right: 10px;
+    margin-top: 30px;
+}
+#title {
+    text-align: center;
+}
+
+.mini_container {
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin: 10px;
+    padding: 15px;
+    position: relative;
+    box-shadow: 2px 2px 2px lightgrey;
+}
+
+#right-column {
+    display: flex;
+    flex-direction: column;
+}
+
+#wells {
+    flex: 1;
+}
+
+#gas {
+    flex: 1;
+}
+
+#aggregate_data {
+    align-items: center;
+}
+
+#oil {
+    flex: 1;
+}
+
+#water {
+    flex: 1;
+}
+
+#tripleContainer {
+    display: flex;
+    flex: 3;
+}
+
+#mainContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+#pie_graph > div > div > svg:nth-child(3) > g.infolayer > g.legend {
+    pointer-events: all;
+    transform: translate(30px, 349px);
+}
+
+td {
+    padding: 5px 20px;
+}
+
+tr {
+    border-bottom: 0 solid white;
+    border-top: 0 solid white;
+}
+
+tr:nth-child(even) {
+  background-color: #f0f0f0;
+}
+tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+table.reversed tr:nth-child(odd) {
+  background-color: #f0f0f0;
+}
+table.reversed tr:nth-child(even) {
+  background-color: #f0f0f0;
+}
+
+table {
+    width: 100%;
+    border-bottom: 0 solid white;
+    border-top: 0 solid white;
+    border-collapse: collapse;
+}
+td,
+th {
+  padding: 8px;
+}
+
+.columns {
+  margin-left: 0 !important;
+}
+
+.row > .columns {
+    padding-left: 0;
+    padding-right: 5px;
+}
+
+.btn {
+    line-height: 1.2;
+    font-weight: 400;
+
+}
+
+.btn-check:active+.btn-outline-primary, .btn-check:checked+.btn-outline-primary, .btn-outline-primary.active, .btn-outline-primary.dropdown-toggle.show, .btn-outline-primary:active {
+    color: #fff;
+    background-color: #3C5C94;
+    border-color: #3C5C94;
+}
+
+.btn-outline-primary {
+    color: #3C5C94;
+    border-color: #3C5C94;
+}
+
+/* restyle radio items */
+.btn-group .form-check {
+  padding-left: 0;
+}
+
+.btn-group > .form-check:not(:last-child) > .btn {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.btn-group > .form-check:not(:first-child) > .btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-left: -1px;
+}
+
+.tooltip-inner {
+    max-width: 700px;
+    text-align: left;
+}
