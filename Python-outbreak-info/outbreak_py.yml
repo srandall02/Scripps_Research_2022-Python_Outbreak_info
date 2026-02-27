@@ -1,0 +1,14 @@
+name: outbreak-py
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - numpy
+  - pandas
+  - pip
+  - pytest
+  - python=3.9
+  - requests
+  - urllib3
+  - webbrowser
+  - frozendict
